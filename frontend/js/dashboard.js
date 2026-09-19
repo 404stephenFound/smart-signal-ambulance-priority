@@ -5,11 +5,40 @@ let map;
 let junctionMarkers = {};
 let ambulanceMarkers = {};
 let routePolylines = {};
+let radarCircle = null;
 let ws;
 let currentPendingRequest = null;
 let alertCountdownInterval = null;
+let currentRadiusM = 1500;
+let currentRadarCenter = [12.9738, 77.6074]; // Default: MG Road Junction
 
 const BANGALORE_CENTER = [12.9738, 77.6074]; // MG Road / Brigade Road Junction
+
+// Network of Arterial Traffic Signals in the Corridor
+const JUNCTION_REGISTRY = [
+  { id: 'JN-04', name: 'MG Road - Brigade Road', lat: 12.9738, lon: 77.6074, primary: true },
+  { id: 'JN-01', name: 'Trinity Circle', lat: 12.9738, lon: 77.6165, primary: false },
+  { id: 'JN-02', name: 'Anil Kumble Circle', lat: 12.9738, lon: 77.5980, primary: false },
+  { id: 'JN-03', name: 'Mayo Hall Junction', lat: 12.9738, lon: 77.6110, primary: false },
+  { id: 'JN-05', name: 'Richmond Circle', lat: 12.9650, lon: 77.5980, primary: false },
+  { id: 'JN-06', name: 'Cubbon Road - BRV', lat: 12.9820, lon: 77.6074, primary: false }
+];
+
+let activeAmbulancesData = {};
+
+// Helper: Haversine distance in meters
+function calcDistanceMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const rad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * rad;
+  const dLon = (lon2 - lon1) * rad;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c);
+}
 
 // Web Audio API Chime generator
 function playAlertChime() {
@@ -18,8 +47,8 @@ function playAlertChime() {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
-    osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15); // A6
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.15);
     gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
     osc.connect(gain);
@@ -31,37 +60,35 @@ function playAlertChime() {
   }
 }
 
-// 1. Initialize Map
+// 1. Initialize Map & Radar
 function initMap() {
   map = L.map('map', {
     center: BANGALORE_CENTER,
-    zoom: 16,
+    zoom: 15,
     zoomControl: false
   });
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-  // 100% Free OpenStreetMap Tiles (No API key / watermark required)
+  // 100% Free OpenStreetMap Tiles (Dark midnight theme)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
     className: 'dark-tiles'
   }).addTo(map);
 
-  // Add Bangalore MG Road Junction Marker
-  const junctionIcon = L.divIcon({
-    className: 'custom-junction-icon',
-    html: `
-      <div style="background: #1e293b; border: 2px solid #38bdf8; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(56, 189, 248, 0.6); color: #38bdf8; font-weight: bold; font-size: 11px;">
-        🚦
-      </div>`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16]
-  });
+  // Draw Radar Geofence Circle
+  radarCircle = L.circle(currentRadarCenter, {
+    radius: currentRadiusM,
+    color: '#06b6d4',
+    weight: 2,
+    dashArray: '6, 8',
+    fillColor: '#38bdf8',
+    fillOpacity: 0.08
+  }).addTo(map);
 
-  const jMarker = L.marker(BANGALORE_CENTER, { icon: junctionIcon }).addTo(map);
-  jMarker.bindPopup("<b>Junction JN-04</b><br>MG Road - Brigade Road Corridor");
-  junctionMarkers['JN-04'] = jMarker;
+  // Render all Traffic Signals in the Registry
+  renderAllJunctionMarkers();
 
   // Draw Corridor Polylines
   const routes = [
@@ -83,10 +110,103 @@ function initMap() {
 
   setTimeout(() => {
     map.invalidateSize();
+    applyRadiusFilter();
   }, 250);
 }
 
-// 2. WebSocket Communication
+// 2. Render and Manage Junction Markers
+function renderAllJunctionMarkers() {
+  JUNCTION_REGISTRY.forEach(j => {
+    const isPrimary = j.id === 'JN-04';
+    const borderColor = isPrimary ? '#38bdf8' : '#64748b';
+    const junctionIcon = L.divIcon({
+      className: 'custom-junction-marker',
+      html: `
+        <div id="junc-icon-${j.id}" class="junction-icon-housing" style="border-color: ${borderColor};">
+          🚦
+        </div>
+        <div id="junc-tag-${j.id}" class="junction-label-tag">
+          ${j.id}: ${j.name.split(' ')[0]}
+        </div>`,
+      iconSize: [48, 50],
+      iconAnchor: [24, 25]
+    });
+
+    const marker = L.marker([j.lat, j.lon], { icon: junctionIcon }).addTo(map);
+    marker.bindPopup(`
+      <div style="font-family: Outfit, sans-serif;">
+        <b style="color: #38bdf8; font-size: 1rem;">${j.name} (${j.id})</b><br>
+        <span style="font-size: 0.8rem; color: #94a3b8;">Bangalore Arterial Traffic Signal</span><br>
+        <div style="margin-top: 6px; font-size: 0.85rem;"><b>Status:</b> Active FSM Controlled</div>
+        <div style="font-size: 0.8rem; color: #34d399;">🟢 IoT Core Telemetry Synced</div>
+      </div>
+    `);
+    junctionMarkers[j.id] = marker;
+  });
+}
+
+// 3. Radar Radius Filter & Scanning
+function setScanRadius(meters, elem) {
+  currentRadiusM = meters;
+  if (radarCircle) {
+    radarCircle.setRadius(meters);
+  }
+
+  document.querySelectorAll('.radius-pill').forEach(b => b.classList.remove('active'));
+  if (elem) elem.classList.add('active');
+
+  applyRadiusFilter();
+  addLogEntry(`Radar Geofence radius adjusted to ${meters >= 1000 ? (meters/1000)+'km' : meters+'m'}`, 'system');
+}
+
+function triggerRadarScan() {
+  playAlertChime();
+  if (radarCircle) {
+    radarCircle.setStyle({ fillColor: '#10b981', fillOpacity: 0.22, color: '#34d399' });
+    setTimeout(() => {
+      radarCircle.setStyle({ fillColor: '#38bdf8', fillOpacity: 0.08, color: '#06b6d4' });
+    }, 800);
+  }
+  applyRadiusFilter();
+  const sigCount = document.getElementById('stat-signals-in-radius').innerText;
+  const ambCount = document.getElementById('stat-amb-in-radius').innerText;
+  addLogEntry(`🛰️ Radar Sweep Completed: ${sigCount} Traffic Lights & ${ambCount} Ambulances scanned in ${currentRadiusM}m zone`, 'priority');
+}
+
+function applyRadiusFilter() {
+  let signalsInRadius = 0;
+  let ambInRadius = 0;
+
+  // Filter Junctions
+  JUNCTION_REGISTRY.forEach(j => {
+    const dist = calcDistanceMeters(currentRadarCenter[0], currentRadarCenter[1], j.lat, j.lon);
+    const inRange = dist <= currentRadiusM;
+    const iconElem = document.getElementById(`junc-icon-${j.id}`);
+    const tagElem = document.getElementById(`junc-tag-${j.id}`);
+
+    if (inRange) {
+      signalsInRadius++;
+      if (iconElem) iconElem.classList.remove('dimmed');
+      if (tagElem) tagElem.style.opacity = '1';
+    } else {
+      if (iconElem) iconElem.classList.add('dimmed');
+      if (tagElem) tagElem.style.opacity = '0.35';
+    }
+  });
+
+  // Filter Ambulances
+  Object.values(activeAmbulancesData).forEach(amb => {
+    const dist = calcDistanceMeters(currentRadarCenter[0], currentRadarCenter[1], amb.lat, amb.lon);
+    if (dist <= currentRadiusM) {
+      ambInRadius++;
+    }
+  });
+
+  document.getElementById('stat-signals-in-radius').innerText = signalsInRadius;
+  document.getElementById('stat-amb-in-radius').innerText = ambInRadius;
+}
+
+// 4. WebSocket Communication
 function connectWebSocket() {
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   const host = window.location.host || 'localhost:8000';
@@ -117,6 +237,9 @@ function handleServerMessage(msg) {
     if (msg.thresholds && msg.thresholds.mode) {
       document.getElementById('sys-mode-badge').innerText = msg.thresholds.mode.toUpperCase();
     }
+    if (msg.ambulances) {
+      msg.ambulances.forEach(a => updateAmbulancePosition(a));
+    }
   } else if (msg.type === 'signal_state') {
     updateSignalDisplay(msg.data);
   } else if (msg.type === 'ambulance_update') {
@@ -130,7 +253,7 @@ function handleServerMessage(msg) {
   }
 }
 
-// 3. Update Signal Indicators
+// 5. Update Signal Indicators
 function updateSignalDisplay(data) {
   const state = data.state;
   const isPriority = data.is_priority;
@@ -149,23 +272,23 @@ function updateSignalDisplay(data) {
   [nsRed, nsYel, nsGrn, ewRed, ewYel, ewGrn].forEach(el => el && el.classList.remove('active'));
 
   if (state.startsWith('NS_GREEN') || state === 'PRIORITY_GREEN_NS') {
-    nsGrn.classList.add('active');
-    ewRed.classList.add('active');
+    if (nsGrn) nsGrn.classList.add('active');
+    if (ewRed) ewRed.classList.add('active');
   } else if (state === 'NS_YELLOW' || (state === 'PREEMPT_YELLOW' && data.active_group === 'NS')) {
-    nsYel.classList.add('active');
-    ewRed.classList.add('active');
+    if (nsYel) nsYel.classList.add('active');
+    if (ewRed) ewRed.classList.add('active');
   } else if (state.startsWith('EW_GREEN') || state === 'PRIORITY_GREEN_EW') {
-    ewGrn.classList.add('active');
-    nsRed.classList.add('active');
+    if (ewGrn) ewGrn.classList.add('active');
+    if (nsRed) nsRed.classList.add('active');
   } else if (state === 'EW_YELLOW' || (state === 'PREEMPT_YELLOW' && data.active_group === 'EW')) {
-    ewYel.classList.add('active');
-    nsRed.classList.add('active');
+    if (ewYel) ewYel.classList.add('active');
+    if (nsRed) nsRed.classList.add('active');
   } else if (state.includes('ALL_RED') || state.includes('PREEMPT_ALL_RED')) {
-    nsRed.classList.add('active');
-    ewRed.classList.add('active');
+    if (nsRed) nsRed.classList.add('active');
+    if (ewRed) ewRed.classList.add('active');
   } else if (state === 'FAULT_SAFE') {
-    nsYel.classList.add('active');
-    ewYel.classList.add('active');
+    if (nsYel) nsYel.classList.add('active');
+    if (ewYel) ewYel.classList.add('active');
   }
 
   // Priority indicator badge
@@ -178,10 +301,11 @@ function updateSignalDisplay(data) {
   }
 }
 
-// 4. Update Ambulance on Map
+// 6. Update Ambulance on Map & Scanner List
 function updateAmbulancePosition(amb) {
   const id = amb.ambulance_id;
   const latLng = [amb.lat, amb.lon];
+  activeAmbulancesData[id] = amb;
 
   if (!ambulanceMarkers[id]) {
     const ambIcon = L.divIcon({
@@ -194,7 +318,7 @@ function updateAmbulancePosition(amb) {
       iconAnchor: [14, 14]
     });
     const marker = L.marker(latLng, { icon: ambIcon }).addTo(map);
-    marker.bindPopup(`<b>Ambulance ${id}</b><br>Speed: ${amb.speed_kmh} km/h`);
+    marker.bindPopup(`<b>Ambulance ${id}</b><br>Speed: ${amb.speed_kmh} km/h<br>Heading: ${amb.heading_deg}°`);
     ambulanceMarkers[id] = marker;
   } else {
     ambulanceMarkers[id].setLatLng(latLng);
@@ -206,6 +330,7 @@ function updateAmbulancePosition(amb) {
 
   // Update Ambulance Sidebar Card
   renderAmbulanceCard(amb);
+  applyRadiusFilter();
 }
 
 function renderAmbulanceCard(amb) {
@@ -215,7 +340,7 @@ function renderAmbulanceCard(amb) {
   const upcomingText = amb.upcoming ? `${amb.upcoming.junction_name} (${amb.upcoming.distance_m}m | ETA: ${amb.upcoming.eta_s}s)` : 'En route (Monitoring)';
 
   const cardHtml = `
-    <div class="amb-header">
+    <div class="amb-header" onclick="focusAmbulance('${amb.ambulance_id}')" style="cursor: pointer;">
       <span class="amb-id">🚑 Ambulance ${amb.ambulance_id}</span>
       <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">EMERGENCY</span>
     </div>
@@ -237,7 +362,14 @@ function renderAmbulanceCard(amb) {
   }
 }
 
-// 5. Handle Priority Request & Alert Banner
+function focusAmbulance(id) {
+  const amb = activeAmbulancesData[id];
+  if (amb && map) {
+    map.flyTo([amb.lat, amb.lon], 16, { duration: 1 });
+  }
+}
+
+// 7. Handle Priority Request & Alert Banner
 function handlePriorityRequest(req, action) {
   if (req.status === 'REQUESTED' && (req.priority_level === 'REQUEST' || req.priority_level === 'EMERGENCY')) {
     currentPendingRequest = req;
@@ -286,7 +418,7 @@ function handleRequestStatusUpdate(req, action) {
   }
 }
 
-// 6. User Action Handlers (Approve / Reject / Override)
+// 8. User Action Handlers (Approve / Reject / Override)
 async function approveCurrentPriority() {
   if (!currentPendingRequest) return;
   const group = currentPendingRequest.approach_id.includes('-N') || currentPendingRequest.approach_id.includes('-S') ? 'NS' : 'EW';
@@ -331,15 +463,19 @@ async function triggerManualOverride() {
   }
 }
 
-// 7. Simulation Trigger (North Route Run)
+// 9. Single & Multi-Fleet Simulation Handlers
 let simInterval = null;
+let fleetInterval = null;
+
 function runDemoSimulation(route = 'north') {
   if (simInterval) clearInterval(simInterval);
+  if (fleetInterval) clearInterval(fleetInterval);
 
   let coords;
   let approachBearing;
+  const ambId = route === 'north' ? "A102" : "A105";
+
   if (route === 'north') {
-    // Cubbon Road -> JN-04 (12.9820 -> 12.9738)
     coords = [
       [12.9820, 77.6074], [12.9805, 77.6074], [12.9790, 77.6074],
       [12.9775, 77.6074], [12.9760, 77.6074], [12.9748, 77.6074],
@@ -347,7 +483,6 @@ function runDemoSimulation(route = 'north') {
     ];
     approachBearing = 180.0;
   } else {
-    // West Route
     coords = [
       [12.9738, 77.5980], [12.9738, 77.6000], [12.9738, 77.6025],
       [12.9738, 77.6045], [12.9738, 77.6060], [12.9738, 77.6074],
@@ -357,18 +492,18 @@ function runDemoSimulation(route = 'north') {
   }
 
   let idx = 0;
-  addLogEntry(`Started live simulation for Ambulance A102 along ${route.toUpperCase()} corridor...`, 'system');
+  addLogEntry(`Started live simulation for Ambulance ${ambId} along ${route.toUpperCase()} corridor...`, 'system');
 
   simInterval = setInterval(async () => {
     if (idx >= coords.length) {
       clearInterval(simInterval);
-      addLogEntry("Simulation run completed.", "system");
+      addLogEntry(`Simulation run for ${ambId} completed.`, "system");
       return;
     }
 
     const [lat, lon] = coords[idx];
     const payload = {
-      ambulance_id: "A102",
+      ambulance_id: ambId,
       lat: lat,
       lon: lon,
       speed_kmh: 48.0,
@@ -392,7 +527,82 @@ function runDemoSimulation(route = 'north') {
   }, 1200);
 }
 
-// 8. Event Logger Helper
+// Multi-Fleet Simultaneous Conflict Simulation
+function runMultiFleetSimulation() {
+  if (simInterval) clearInterval(simInterval);
+  if (fleetInterval) clearInterval(fleetInterval);
+
+  const fleet = [
+    {
+      id: "A102",
+      name: "North Route (Cubbon)",
+      heading: 180.0,
+      coords: [
+        [12.9820, 77.6074], [12.9800, 77.6074], [12.9780, 77.6074],
+        [12.9760, 77.6074], [12.9745, 77.6074], [12.9738, 77.6074], [12.9720, 77.6074]
+      ]
+    },
+    {
+      id: "A101",
+      name: "East Route (Trinity)",
+      heading: 270.0,
+      coords: [
+        [12.9738, 77.6165], [12.9738, 77.6140], [12.9738, 77.6110],
+        [12.9738, 77.6090], [12.9738, 77.6074], [12.9738, 77.6050]
+      ]
+    },
+    {
+      id: "A103",
+      name: "South Route (Brigade)",
+      heading: 0.0,
+      coords: [
+        [12.9650, 77.6074], [12.9675, 77.6074], [12.9700, 77.6074],
+        [12.9720, 77.6074], [12.9738, 77.6074], [12.9755, 77.6074]
+      ]
+    }
+  ];
+
+  let step = 0;
+  const maxSteps = 8;
+  addLogEntry("🚑 Starting Multi-Ambulance Fleet Radar Conflict Simulation (A101, A102, A103)...", "alert");
+  playAlertChime();
+
+  fleetInterval = setInterval(async () => {
+    if (step >= maxSteps) {
+      clearInterval(fleetInterval);
+      addLogEntry("Multi-Ambulance fleet conflict simulation finished.", "system");
+      return;
+    }
+
+    for (const amb of fleet) {
+      const pt = amb.coords[Math.min(step, amb.coords.length - 1)];
+      const payload = {
+        ambulance_id: amb.id,
+        lat: pt[0],
+        lon: pt[1],
+        speed_kmh: 46.0,
+        heading_deg: amb.heading,
+        emergency: true,
+        seq: step + 1,
+        source: "fleet_sim"
+      };
+
+      try {
+        await fetch('/telemetry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.error("Fleet telemetry push error:", e);
+      }
+    }
+
+    step++;
+  }, 1200);
+}
+
+// 10. Event Logger Helper
 function addLogEntry(text, type = 'system') {
   const container = document.getElementById('event-log-container');
   if (!container) return;
@@ -412,3 +622,4 @@ window.addEventListener('DOMContentLoaded', () => {
   initMap();
   connectWebSocket();
 });
+

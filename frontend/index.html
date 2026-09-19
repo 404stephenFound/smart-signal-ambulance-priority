@@ -106,18 +106,21 @@
         </div>
         <div class="sim-btn-row">
           <button id="btn-sim-north" class="btn-sim" onclick="runDemoSimulation('north')">
-            ▶ North Route
+            ▶ North: A102
           </button>
           <button id="btn-sim-west" class="btn-sim btn-sim-west" onclick="runDemoSimulation('west')">
-            ▶ West Route
+            ▶ West: A105
           </button>
         </div>
+        <button id="btn-sim-fleet" class="btn-sim" style="width: 100%; margin-top: 6px; background: linear-gradient(135deg, rgba(239,68,68,0.25), rgba(245,158,11,0.25)); border-color: rgba(239,68,68,0.4);" onclick="runMultiFleetSimulation()">
+          🚑 Multi-Fleet Conflict (A101 + A102 + A103)
+        </button>
       </div>
 
       <!-- Active Ambulances Queue -->
       <div class="ambulance-list-section">
         <div class="panel-header" style="padding-bottom: 4px; border: none;">
-          <h3 class="panel-title" style="font-size: 0.85rem;">🚑 Active Emergency Vehicles</h3>
+          <h3 class="panel-title" style="font-size: 0.85rem;">🚑 Radar Ambulance Scanner</h3>
         </div>
         <div id="ambulance-list-container" class="ambulance-list">
           <!-- Dynamically rendered ambulance cards -->
@@ -126,8 +129,36 @@
     </section>
 
     <!-- Center Column: Map & Priority Alert Banner -->
-    <section class="map-container">
-      <div id="map"></div>
+    <section class="map-container" style="display: flex; flex-direction: column;">
+      <!-- Radar Scanner Toolbar -->
+      <div class="radar-toolbar">
+        <div class="radar-stats-group">
+          <button class="btn-radar-scan" onclick="triggerRadarScan()">
+            <span>🛰️</span> Scan Radar
+          </button>
+          <div class="radar-stat-badge">
+            <span>Signals in Radius:</span>
+            <span id="stat-signals-in-radius" class="radar-stat-val">6</span>
+          </div>
+          <div class="radar-stat-badge">
+            <span>Ambulances in Radius:</span>
+            <span id="stat-amb-in-radius" class="radar-stat-val">0</span>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Radius:</span>
+          <div class="radius-pill-group">
+            <button class="radius-pill" onclick="setScanRadius(500, this)">500m</button>
+            <button class="radius-pill" onclick="setScanRadius(1000, this)">1.0km</button>
+            <button class="radius-pill active" onclick="setScanRadius(1500, this)">1.5km</button>
+            <button class="radius-pill" onclick="setScanRadius(2500, this)">2.5km</button>
+            <button class="radius-pill" onclick="setScanRadius(5000, this)">All (5km)</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="map" style="flex: 1; min-height: 480px;"></div>
 
       <!-- Priority Alert Banner Overlay -->
       <div id="priority-alert-banner" class="priority-alert-banner">
