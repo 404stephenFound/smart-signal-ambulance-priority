@@ -489,6 +489,11 @@ body {
   background: #141312;
 }
 
+/* 100% Free Minimalist Dark Map Filter for OpenStreetMap */
+.dark-tiles {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.2) brightness(0.85);
+}
+
 /* Custom Minimalist Map Icons */
 .custom-junction-marker {
   display: flex;
