@@ -45,27 +45,30 @@
     <section class="panel-card">
       <div class="panel-header">
         <h2 class="panel-title">🚦 Signal Controller (JN-04)</h2>
-        <span id="priority-active-badge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">
+        <span id="priority-active-badge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold; animation: pulse-red 1.5s infinite;">
           PRIORITY ACTIVE
         </span>
       </div>
 
-      <!-- Live Signal Box -->
+      <!-- Live Signal Controller HUD Box -->
       <div class="signal-box">
-        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
-          <span style="font-size: 0.85rem; color: var(--text-secondary);">Current Phase:</span>
-          <span id="signal-state-text" style="font-weight: 700; color: #38bdf8; font-size: 1rem;">INITIALIZING</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: baseline;">
-          <span style="font-size: 0.85rem; color: var(--text-secondary);">Phase Countdown:</span>
-          <span id="signal-remaining-sec" style="font-weight: 700; color: #f59e0b; font-size: 1.2rem;">--</span>
+        <div class="signal-status-row">
+          <div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Current Phase</div>
+            <div id="signal-state-text" class="signal-phase-badge">INITIALIZING</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Countdown</div>
+            <div id="signal-remaining-sec" class="signal-timer-badge">--</div>
+          </div>
         </div>
 
         <div class="signal-intersection-view">
           <!-- North-South Group -->
           <div class="signal-approach-card">
             <div class="approach-label">
-              <span>North-South (NS)</span>
+              <span>↕ North-South</span>
+              <span style="color: #38bdf8; font-size: 0.68rem;">NS</span>
             </div>
             <div class="traffic-light-housing">
               <div id="ns-light-red" class="light-bulb red"></div>
@@ -77,7 +80,8 @@
           <!-- East-West Group -->
           <div class="signal-approach-card">
             <div class="approach-label">
-              <span>East-West (EW)</span>
+              <span>↔ East-West</span>
+              <span style="color: #818cf8; font-size: 0.68rem;">EW</span>
             </div>
             <div class="traffic-light-housing">
               <div id="ew-light-red" class="light-bulb red"></div>
@@ -87,35 +91,37 @@
           </div>
         </div>
 
-        <button id="btn-override-normal" class="btn btn-reject" style="width: 100%; margin-top: 12px;" onclick="triggerManualOverride()">
+        <button id="btn-override-normal" class="btn-override" onclick="triggerManualOverride()">
           🔄 Manual Override / Resume Normal
         </button>
       </div>
 
-      <!-- Simulation Runner -->
+      <!-- Quick GPS Simulator Launcher -->
       <div class="sim-controls">
-        <div class="panel-header" style="padding-bottom: 4px;">
-          <h3 class="panel-title" style="font-size: 0.9rem;">⚡ GPS Simulator Control</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: #f8fafc; display: flex; align-items: center; gap: 4px;">
+            ⚡ GPS Simulator
+          </span>
+          <span style="font-size: 0.7rem; color: var(--text-muted);">1Hz Telemetry</span>
         </div>
         <div class="sim-btn-row">
-          <button id="btn-sim-north" class="btn btn-sim" onclick="runDemoSimulation('north')">
-            ▶ Run North Corridor
+          <button id="btn-sim-north" class="btn-sim" onclick="runDemoSimulation('north')">
+            ▶ North Route
           </button>
-          <button id="btn-sim-west" class="btn btn-sim" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); color: white;" onclick="runDemoSimulation('west')">
-            ▶ Run West Corridor
+          <button id="btn-sim-west" class="btn-sim btn-sim-west" onclick="runDemoSimulation('west')">
+            ▶ West Route
           </button>
-        </div>
-        <div style="font-size: 0.72rem; color: var(--text-muted); text-align: center;">
-          Replays 1Hz GPS telemetry with heading estimation & distance along polyline.
         </div>
       </div>
 
-      <!-- Active Ambulances -->
-      <div class="panel-header" style="padding-top: 6px;">
-        <h3 class="panel-title" style="font-size: 0.9rem;">🚑 Active Emergency Vehicles</h3>
-      </div>
-      <div id="ambulance-list-container" class="ambulance-list">
-        <!-- Dynamically rendered ambulance cards -->
+      <!-- Active Ambulances Queue -->
+      <div class="ambulance-list-section">
+        <div class="panel-header" style="padding-bottom: 4px; border: none;">
+          <h3 class="panel-title" style="font-size: 0.85rem;">🚑 Active Emergency Vehicles</h3>
+        </div>
+        <div id="ambulance-list-container" class="ambulance-list">
+          <!-- Dynamically rendered ambulance cards -->
+        </div>
       </div>
     </section>
 
