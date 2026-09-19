@@ -132,13 +132,27 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-lg);
-  padding: 1.2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 0.75rem;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.25) rgba(15, 23, 42, 0.3);
+}
+
+.panel-card::-webkit-scrollbar {
+  width: 4px;
+}
+.panel-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+.panel-card::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.25);
+  border-radius: 4px;
 }
 
 .panel-header {
@@ -146,11 +160,12 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-glass);
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 .panel-title {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.3px;
   color: var(--text-primary);
@@ -164,11 +179,12 @@ body {
   background: linear-gradient(145deg, rgba(19, 27, 46, 0.85), rgba(11, 15, 25, 0.9));
   border: 1px solid rgba(56, 189, 248, 0.15);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
 }
 
 .signal-status-row {
@@ -176,25 +192,25 @@ body {
   justify-content: space-between;
   align-items: center;
   background: rgba(15, 23, 42, 0.6);
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-glass);
 }
 
 .signal-phase-badge {
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   letter-spacing: 0.5px;
   color: var(--accent-blue);
   background: rgba(56, 189, 248, 0.1);
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 4px;
   border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
 .signal-timer-badge {
   font-weight: 800;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--accent-yellow);
   text-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
 }
@@ -202,22 +218,22 @@ body {
 .signal-intersection-view {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
 }
 
 .signal-approach-card {
   background: rgba(10, 14, 23, 0.9);
   border-radius: var(--radius-sm);
-  padding: 8px 10px;
+  padding: 6px 8px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
 }
 
 .approach-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--text-secondary);
   display: flex;
@@ -230,9 +246,9 @@ body {
 .traffic-light-housing {
   display: flex;
   background: #06090f;
-  border-radius: 24px;
-  padding: 5px 12px;
-  gap: 10px;
+  border-radius: 20px;
+  padding: 4px 10px;
+  gap: 8px;
   align-items: center;
   justify-content: space-around;
   border: 1px solid #1e293b;
@@ -240,8 +256,8 @@ body {
 }
 
 .light-bulb {
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   opacity: 0.15;
   transition: all 0.25s ease;
@@ -270,13 +286,13 @@ body {
 
 .btn-override {
   width: 100%;
-  padding: 8px 12px;
+  padding: 7px 10px;
   background: rgba(51, 65, 85, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-sm);
   color: #cbd5e1;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -296,10 +312,11 @@ body {
   background: linear-gradient(145deg, rgba(19, 27, 46, 0.6), rgba(15, 23, 42, 0.7));
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-md);
-  padding: 0.9rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .sim-btn-row {
@@ -309,8 +326,8 @@ body {
 }
 
 .btn-sim {
-  padding: 9px 10px;
-  font-size: 0.8rem;
+  padding: 8px 8px;
+  font-size: 0.78rem;
   font-weight: 700;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(56, 189, 248, 0.3);
@@ -320,7 +337,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   transition: all 0.2s ease;
 }
 
@@ -343,49 +360,35 @@ body {
 
 /* Ambulance List Cards & Custom Scrollbar */
 .ambulance-list-section {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  gap: 6px;
+  min-height: 140px;
 }
 
 .ambulance-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  overflow-y: auto;
-  flex: 1;
-  padding-right: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56, 189, 248, 0.3) rgba(15, 23, 42, 0.4);
-}
-
-.ambulance-list::-webkit-scrollbar {
-  width: 5px;
-}
-.ambulance-list::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.4);
-  border-radius: 4px;
-}
-.ambulance-list::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.3);
-  border-radius: 4px;
+  overflow-y: visible;
+  padding-right: 2px;
 }
 
 .ambulance-card {
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(15, 23, 42, 0.85);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-sm);
-  padding: 9px 12px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .ambulance-card.emergency {
   border-left: 3px solid var(--accent-red);
-  background: linear-gradient(90deg, rgba(239, 68, 68, 0.12), rgba(15, 23, 42, 0.75) 40%);
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.15), rgba(15, 23, 42, 0.85) 45%);
 }
 
 .amb-header {
@@ -396,7 +399,7 @@ body {
 
 .amb-id {
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -406,9 +409,9 @@ body {
 .amb-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: var(--text-secondary);
-  row-gap: 2px;
+  row-gap: 3px;
 }
 
 /* Center Map Container */
