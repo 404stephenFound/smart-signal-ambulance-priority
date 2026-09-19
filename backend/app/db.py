@@ -9,7 +9,9 @@ SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "db", "schema.
 SEED_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "db", "seed.sql")
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30.0)
+    conn.execute("PRAGMA journal_mode=WAL;")
+    conn.execute("PRAGMA busy_timeout=5000;")
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -51,12 +53,13 @@ def save_ambulance_position(data: Dict[str, Any]):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+        ts_val = data.get("ts") or datetime.now().isoformat()
         cursor.execute(
             """INSERT INTO ambulance_positions (ambulance_id, ts, latitude, longitude, speed_kmh, heading_deg, emergency, source)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 data["ambulance_id"],
-                data.get("ts", datetime.utcnow().isoformat()),
+                ts_val,
                 data["lat"],
                 data["lon"],
                 data.get("speed_kmh", 0.0),
@@ -77,7 +80,7 @@ def log_signal_event(junction_id: str, request_id: Optional[str], previous_state
         cursor.execute(
             """INSERT INTO signal_events (junction_id, request_id, previous_state, new_state, reason, ts)
                VALUES (?, ?, ?, ?, ?, ?)""",
-            (junction_id, request_id, previous_state, new_state, reason, datetime.utcnow().isoformat())
+            (junction_id, request_id, previous_state, new_state, reason, datetime.now().isoformat())
         )
         conn.commit()
         conn.close()

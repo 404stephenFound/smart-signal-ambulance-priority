@@ -144,28 +144,35 @@ async def fsm_ticker():
     while True:
         try:
             for jid, fsm in list(junction_fsms.items()):
-                state = fsm.tick(dt=0.2)
+                state = fsm.tick(dt=0.5)
                 
                 # Check for state transition event
                 prev_state = last_states.get(jid)
-                if prev_state and prev_state != state.state:
-                    log_signal_event(
-                        junction_id=jid,
-                        request_id=state.active_request_id,
-                        previous_state=prev_state,
-                        new_state=state.state,
-                        reason="priority" if state.is_priority else "normal_cycle"
-                    )
+                if prev_state is not None and prev_state != state.state:
+                    try:
+                        log_signal_event(
+                            junction_id=jid,
+                            request_id=state.active_request_id,
+                            previous_state=prev_state,
+                            new_state=state.state,
+                            reason="priority" if state.is_priority else "normal_cycle"
+                        )
+                    except Exception as e:
+                        pass
                 last_states[jid] = state.state
                 
-                # Broadcast signal update
-                await ws_manager.broadcast({
-                    "type": "signal_state",
-                    "data": state.dict()
-                })
+                # Broadcast signal update only if clients connected
+                if ws_manager.active_connections:
+                    st_data = state.model_dump() if hasattr(state, "model_dump") else state.dict()
+                    if st_data.get("last_heartbeat"):
+                        st_data["last_heartbeat"] = str(st_data["last_heartbeat"])
+                    await ws_manager.broadcast({
+                        "type": "signal_state",
+                        "data": st_data
+                    })
         except Exception as e:
             print(f"[Ticker Error] {e}")
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.5)
 
 @app.on_event("startup")
 async def startup_event():
