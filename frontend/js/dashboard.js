@@ -80,6 +80,10 @@ function initMap() {
     }).addTo(map);
     routePolylines[r.id] = pl;
   });
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 250);
 }
 
 // 2. WebSocket Communication
