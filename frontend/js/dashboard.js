@@ -77,33 +77,33 @@ function initMap() {
     className: 'dark-tiles'
   }).addTo(map);
 
-  // Draw Radar Geofence Circle
+  // Draw Radar Geofence Circle (Claude Minimalist Terracotta)
   radarCircle = L.circle(currentRadarCenter, {
     radius: currentRadiusM,
-    color: '#06b6d4',
-    weight: 2,
-    dashArray: '6, 8',
-    fillColor: '#38bdf8',
-    fillOpacity: 0.08
+    color: '#cc785c',
+    weight: 1.5,
+    dashArray: '5, 7',
+    fillColor: '#cc785c',
+    fillOpacity: 0.05
   }).addTo(map);
 
   // Render all Traffic Signals in the Registry
   renderAllJunctionMarkers();
 
-  // Draw Corridor Polylines
+  // Draw Corridor Polylines (Subtle warm corridors)
   const routes = [
-    { id: 'SEG-N', name: 'North (Cubbon Rd)', coords: [[12.9820, 77.6074], [12.9738, 77.6074]], color: '#38bdf8' },
-    { id: 'SEG-S', name: 'South (Brigade Rd)', coords: [[12.9650, 77.6074], [12.9738, 77.6074]], color: '#38bdf8' },
-    { id: 'SEG-W', name: 'West (MG Rd West)', coords: [[12.9738, 77.5980], [12.9738, 77.6074]], color: '#818cf8' },
-    { id: 'SEG-E', name: 'East (Trinity Circle)', coords: [[12.9738, 77.6165], [12.9738, 77.6074]], color: '#818cf8' }
+    { id: 'SEG-N', name: 'North (Cubbon Rd)', coords: [[12.9820, 77.6074], [12.9738, 77.6074]], color: '#cc785c' },
+    { id: 'SEG-S', name: 'South (Brigade Rd)', coords: [[12.9650, 77.6074], [12.9738, 77.6074]], color: '#cc785c' },
+    { id: 'SEG-W', name: 'West (MG Rd West)', coords: [[12.9738, 77.5980], [12.9738, 77.6074]], color: '#a6a49c' },
+    { id: 'SEG-E', name: 'East (Trinity Circle)', coords: [[12.9738, 77.6165], [12.9738, 77.6074]], color: '#a6a49c' }
   ];
 
   routes.forEach(r => {
     const pl = L.polyline(r.coords, {
       color: r.color,
-      weight: 4,
-      opacity: 0.6,
-      dashArray: '6, 8'
+      weight: 3,
+      opacity: 0.5,
+      dashArray: '4, 6'
     }).addTo(map);
     routePolylines[r.id] = pl;
   });
@@ -118,7 +118,7 @@ function initMap() {
 function renderAllJunctionMarkers() {
   JUNCTION_REGISTRY.forEach(j => {
     const isPrimary = j.id === 'JN-04';
-    const borderColor = isPrimary ? '#38bdf8' : '#64748b';
+    const borderColor = isPrimary ? '#cc785c' : '#525048';
     const junctionIcon = L.divIcon({
       className: 'custom-junction-marker',
       html: `
@@ -128,17 +128,17 @@ function renderAllJunctionMarkers() {
         <div id="junc-tag-${j.id}" class="junction-label-tag">
           ${j.id}: ${j.name.split(' ')[0]}
         </div>`,
-      iconSize: [48, 50],
-      iconAnchor: [24, 25]
+      iconSize: [44, 46],
+      iconAnchor: [22, 23]
     });
 
     const marker = L.marker([j.lat, j.lon], { icon: junctionIcon }).addTo(map);
     marker.bindPopup(`
-      <div style="font-family: Outfit, sans-serif;">
-        <b style="color: #38bdf8; font-size: 1rem;">${j.name} (${j.id})</b><br>
-        <span style="font-size: 0.8rem; color: #94a3b8;">Bangalore Arterial Traffic Signal</span><br>
-        <div style="margin-top: 6px; font-size: 0.85rem;"><b>Status:</b> Active FSM Controlled</div>
-        <div style="font-size: 0.8rem; color: #34d399;">🟢 IoT Core Telemetry Synced</div>
+      <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px 2px;">
+        <div style="font-family: 'Newsreader', serif; color: #f4f3ee; font-size: 1.1rem; font-weight: 500;">${j.name} (${j.id})</div>
+        <div style="font-size: 0.78rem; color: #a6a49c; margin-top: 2px;">Bangalore Arterial Traffic Signal</div>
+        <div style="margin-top: 6px; font-size: 0.8rem; color: #d1cfc7;"><b>Control:</b> FSM Priority Engine</div>
+        <div style="font-size: 0.75rem; color: #34d399; margin-top: 2px;">🟢 AWS IoT Core Link Synced</div>
       </div>
     `);
     junctionMarkers[j.id] = marker;
@@ -156,21 +156,21 @@ function setScanRadius(meters, elem) {
   if (elem) elem.classList.add('active');
 
   applyRadiusFilter();
-  addLogEntry(`Radar Geofence radius adjusted to ${meters >= 1000 ? (meters/1000)+'km' : meters+'m'}`, 'system');
+  addLogEntry(`Radar radius adjusted to ${meters >= 1000 ? (meters/1000)+'km' : meters+'m'}`, 'system');
 }
 
 function triggerRadarScan() {
   playAlertChime();
   if (radarCircle) {
-    radarCircle.setStyle({ fillColor: '#10b981', fillOpacity: 0.22, color: '#34d399' });
+    radarCircle.setStyle({ fillColor: '#34d399', fillOpacity: 0.18, color: '#34d399' });
     setTimeout(() => {
-      radarCircle.setStyle({ fillColor: '#38bdf8', fillOpacity: 0.08, color: '#06b6d4' });
-    }, 800);
+      radarCircle.setStyle({ fillColor: '#cc785c', fillOpacity: 0.05, color: '#cc785c' });
+    }, 700);
   }
   applyRadiusFilter();
   const sigCount = document.getElementById('stat-signals-in-radius').innerText;
   const ambCount = document.getElementById('stat-amb-in-radius').innerText;
-  addLogEntry(`🛰️ Radar Sweep Completed: ${sigCount} Traffic Lights & ${ambCount} Ambulances scanned in ${currentRadiusM}m zone`, 'priority');
+  addLogEntry(`Radar Sweep: ${sigCount} Traffic Lights & ${ambCount} Ambulances scanned in ${currentRadiusM}m zone`, 'priority');
 }
 
 function applyRadiusFilter() {
@@ -190,7 +190,7 @@ function applyRadiusFilter() {
       if (tagElem) tagElem.style.opacity = '1';
     } else {
       if (iconElem) iconElem.classList.add('dimmed');
-      if (tagElem) tagElem.style.opacity = '0.35';
+      if (tagElem) tagElem.style.opacity = '0.3';
     }
   });
 
@@ -203,6 +203,8 @@ function applyRadiusFilter() {
   });
 
   document.getElementById('stat-signals-in-radius').innerText = signalsInRadius;
+  document.getElementById('stat-amb-in-radius').innerText = ambInRadius;
+}
   document.getElementById('stat-amb-in-radius').innerText = ambInRadius;
 }
 
@@ -311,14 +313,14 @@ function updateAmbulancePosition(amb) {
     const ambIcon = L.divIcon({
       className: 'custom-amb-icon',
       html: `
-        <div id="marker-${id}" style="background: #ef4444; border: 2px solid white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(239, 68, 68, 0.9); font-size: 14px; transform: rotate(${amb.heading_deg || 0}deg); transition: transform 0.3s ease;">
+        <div id="marker-${id}" style="background: #cc785c; border: 1.5px solid #ffffff; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); font-size: 13px; transform: rotate(${amb.heading_deg || 0}deg); transition: transform 0.3s ease;">
           🚑
         </div>`,
-      iconSize: [28, 28],
-      iconAnchor: [14, 14]
+      iconSize: [26, 26],
+      iconAnchor: [13, 13]
     });
     const marker = L.marker(latLng, { icon: ambIcon }).addTo(map);
-    marker.bindPopup(`<b>Ambulance ${id}</b><br>Speed: ${amb.speed_kmh} km/h<br>Heading: ${amb.heading_deg}°`);
+    marker.bindPopup(`<div style="font-family: 'Plus Jakarta Sans', sans-serif;"><b style="font-family: 'Newsreader', serif; font-size: 1rem;">Ambulance ${id}</b><br><span style="color: #a6a49c; font-size: 0.8rem;">Speed: ${amb.speed_kmh} km/h • Heading: ${amb.heading_deg}°</span></div>`);
     ambulanceMarkers[id] = marker;
   } else {
     ambulanceMarkers[id].setLatLng(latLng);
