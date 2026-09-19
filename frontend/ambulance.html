@@ -118,9 +118,47 @@
         <span id="beacon-status" style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.2); color: var(--blue); padding: 4px 8px; border-radius: 6px;">BEACON IDLE</span>
       </div>
 
+      <style>
+        .mode-selector {
+          display: flex;
+          background: rgba(15, 23, 42, 0.8);
+          padding: 4px;
+          border-radius: 10px;
+          border: 1px solid var(--border);
+          gap: 6px;
+        }
+        .mode-btn {
+          flex: 1;
+          padding: 8px 12px;
+          background: transparent;
+          border: none;
+          color: #94a3b8;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .mode-btn.active {
+          background: #38bdf8;
+          color: #0f172a;
+          box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+        }
+      </style>
+
+      <!-- Source Mode Selection -->
+      <div class="mode-selector">
+        <button id="mode-sim-btn" class="mode-btn active" onclick="setTrackingMode('sim')">
+          🚗 Demo Route (Bangalore)
+        </button>
+        <button id="mode-gps-btn" class="mode-btn" onclick="setTrackingMode('gps')">
+          📡 Phone Live GPS
+        </button>
+      </div>
+
       <!-- Emergency Toggle Button -->
       <button id="toggle-emergency-btn" class="emergency-btn inactive" onclick="toggleEmergencyMode()">
-        <span>🚨 EMERGENCY MODE: OFF</span>
+        <span>🚨 START EMERGENCY PRIORITY</span>
       </button>
 
       <!-- Corridor Status HUD -->
@@ -148,8 +186,20 @@
         </div>
       </div>
 
+      <!-- Telemetry Diagnostics Footer -->
+      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05);">
+        <div>
+          <span id="coord-mode-tag" style="color: #38bdf8; font-weight: 600;">Demo Corridor Drive (Bangalore)</span><br>
+          <span id="hud-coords" style="color: #94a3b8; font-family: monospace;">12.98300, 77.60740</span>
+        </div>
+        <div style="text-align: right;">
+          <span style="color: #94a3b8;">Packets Sent</span><br>
+          <span id="hud-packets" style="color: #34d399; font-weight: bold;">#0</span>
+        </div>
+      </div>
+
       <div style="font-size: 0.75rem; color: #64748b; text-align: center;">
-        HTML5 Geolocation Beacon & AWS IoT Core Telemetry Link
+        AWS IoT Core Telemetry Link & Real-Time Green Corridor System
       </div>
     </div>
   </div>
