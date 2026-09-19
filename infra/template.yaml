@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Team infinity - Intelligent Ambulance Priority Traffic Signal System (EC2 + Security Group + CloudFront)'
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: 't3.micro'
+    Description: 'EC2 Instance Type (Free tier eligible: t3.micro / t2.micro)'
+  
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: 'Optional EC2 Key Pair for SSH access'
+    Default: ''
+
+Conditions:
+  HasKeyName: !Not [!Equals [!Ref KeyName, '']]
+
+Resources:
+  # Security Group exposing HTTP (80), Backend API (8000), SSH (22)
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Allow HTTP, WebSocket, and SSH traffic for Ambulance Priority System'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8000
+          ToPort: 8000
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  # EC2 Instance running Docker
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      KeyName: !If [HasKeyName, !Ref KeyName, !Ref 'AWS::NoValue']
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+      # Ubuntu 22.04 LTS AMI in ap-south-1 Mumbai (or adjust per region)
+      ImageId: 'ami-03f4878755434977f' # Canonical Ubuntu 22.04 LTS (ap-south-1)
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install -y docker.io docker-compose git
+          systemctl enable docker
+          systemctl start docker
+          cd /home/ubuntu
+          git clone https://github.com/404stephenFound/smart-signal-ambulance-priority.git
+          cd smart-signal-ambulance-priority
+          docker-compose up -d --build
+      Tags:
+        - Key: Name
+          Value: 'Ambulance-Priority-Server'
+        - Key: Project
+          Value: 'FirstCommitHackathon-infinity'
+
+Outputs:
+  EC2PublicIP:
+    Description: 'Public IP of the deployed EC2 server'
+    Value: !GetAtt EC2Instance.PublicIp
+  
+  DashboardURL:
+    Description: 'Direct HTTP Dashboard URL'
+    Value: !Sub 'http://${EC2Instance.PublicIp}:8000'
+
+  AmbulanceHUDURL:
+    Description: 'Direct Ambulance Driver HUD URL'
+    Value: !Sub 'http://${EC2Instance.PublicIp}:8000/ambulance'
