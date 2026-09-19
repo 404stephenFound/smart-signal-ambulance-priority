@@ -1,5 +1,5 @@
 // Intelligent Traffic Priority & Police Control Dashboard Logic
-// Team infinity — First Commit Hackathon
+// Claude-Inspired Minimalist Design — Team infinity
 
 let map;
 let junctionMarkers = {};
@@ -90,7 +90,7 @@ function initMap() {
   // Render all Traffic Signals in the Registry
   renderAllJunctionMarkers();
 
-  // Draw Corridor Polylines (Subtle warm corridors)
+  // Draw Corridor Polylines
   const routes = [
     { id: 'SEG-N', name: 'North (Cubbon Rd)', coords: [[12.9820, 77.6074], [12.9738, 77.6074]], color: '#cc785c' },
     { id: 'SEG-S', name: 'South (Brigade Rd)', coords: [[12.9650, 77.6074], [12.9738, 77.6074]], color: '#cc785c' },
@@ -202,10 +202,10 @@ function applyRadiusFilter() {
     }
   });
 
-  document.getElementById('stat-signals-in-radius').innerText = signalsInRadius;
-  document.getElementById('stat-amb-in-radius').innerText = ambInRadius;
-}
-  document.getElementById('stat-amb-in-radius').innerText = ambInRadius;
+  const sigElem = document.getElementById('stat-signals-in-radius');
+  if (sigElem) sigElem.innerText = signalsInRadius;
+  const ambElem = document.getElementById('stat-amb-in-radius');
+  if (ambElem) ambElem.innerText = ambInRadius;
 }
 
 // 4. WebSocket Communication
@@ -217,8 +217,10 @@ function connectWebSocket() {
   ws = new WebSocket(wsUrl);
 
   ws.onopen = () => {
-    document.getElementById('ws-status-text').innerText = 'Connected (100% Real-Time)';
-    document.getElementById('ws-status-dot').style.background = '#34d399';
+    const statusText = document.getElementById('ws-status-text');
+    if (statusText) statusText.innerText = 'Connected (100% Real-Time)';
+    const dot = document.getElementById('ws-status-dot');
+    if (dot) dot.style.background = '#34d399';
     addLogEntry('WebSocket link established with AWS IoT Core / Backend', 'system');
   };
 
@@ -228,8 +230,10 @@ function connectWebSocket() {
   };
 
   ws.onclose = () => {
-    document.getElementById('ws-status-text').innerText = 'Reconnecting...';
-    document.getElementById('ws-status-dot').style.background = '#ef4444';
+    const statusText = document.getElementById('ws-status-text');
+    if (statusText) statusText.innerText = 'Reconnecting...';
+    const dot = document.getElementById('ws-status-dot');
+    if (dot) dot.style.background = '#ef4444';
     setTimeout(connectWebSocket, 2000);
   };
 }
@@ -237,7 +241,8 @@ function connectWebSocket() {
 function handleServerMessage(msg) {
   if (msg.type === 'init_snapshot') {
     if (msg.thresholds && msg.thresholds.mode) {
-      document.getElementById('sys-mode-badge').innerText = msg.thresholds.mode.toUpperCase();
+      const modeBadge = document.getElementById('sys-mode-badge');
+      if (modeBadge) modeBadge.innerText = msg.thresholds.mode.toUpperCase();
     }
     if (msg.ambulances) {
       msg.ambulances.forEach(a => updateAmbulancePosition(a));
@@ -259,8 +264,10 @@ function handleServerMessage(msg) {
 function updateSignalDisplay(data) {
   const state = data.state;
   const isPriority = data.is_priority;
-  document.getElementById('signal-state-text').innerText = state;
-  document.getElementById('signal-remaining-sec').innerText = `${data.remaining_s}s`;
+  const stateElem = document.getElementById('signal-state-text');
+  if (stateElem) stateElem.innerText = state;
+  const secElem = document.getElementById('signal-remaining-sec');
+  if (secElem) secElem.innerText = `${data.remaining_s}s`;
 
   const nsRed = document.getElementById('ns-light-red');
   const nsYel = document.getElementById('ns-light-yellow');
@@ -295,11 +302,13 @@ function updateSignalDisplay(data) {
 
   // Priority indicator badge
   const pBadge = document.getElementById('priority-active-badge');
-  if (isPriority) {
-    pBadge.style.display = 'inline-block';
-    pBadge.innerText = `🚨 PRIORITY ACTIVE: ${data.active_group || 'CORRIDOR'}`;
-  } else {
-    pBadge.style.display = 'none';
+  if (pBadge) {
+    if (isPriority) {
+      pBadge.style.display = 'inline-block';
+      pBadge.innerText = `PRIORITY: ${data.active_group || 'CORRIDOR'}`;
+    } else {
+      pBadge.style.display = 'none';
+    }
   }
 }
 
@@ -330,13 +339,13 @@ function updateAmbulancePosition(amb) {
     }
   }
 
-  // Update Ambulance Sidebar Card
   renderAmbulanceCard(amb);
   applyRadiusFilter();
 }
 
 function renderAmbulanceCard(amb) {
   const container = document.getElementById('ambulance-list-container');
+  if (!container) return;
   let card = document.getElementById(`card-${amb.ambulance_id}`);
 
   const upcomingText = amb.upcoming ? `${amb.upcoming.junction_name} (${amb.upcoming.distance_m}m | ETA: ${amb.upcoming.eta_s}s)` : 'En route (Monitoring)';
@@ -344,12 +353,12 @@ function renderAmbulanceCard(amb) {
   const cardHtml = `
     <div class="amb-header" onclick="focusAmbulance('${amb.ambulance_id}')" style="cursor: pointer;">
       <span class="amb-id">🚑 Ambulance ${amb.ambulance_id}</span>
-      <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">EMERGENCY</span>
+      <span class="badge" style="background: rgba(204, 120, 92, 0.15); color: #e08a68; border: 1px solid rgba(204, 120, 92, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; font-family: var(--font-mono); font-weight: 600;">EMERGENCY</span>
     </div>
     <div class="amb-details">
       <div><b>Speed:</b> ${amb.speed_kmh} km/h</div>
       <div><b>Heading:</b> ${amb.heading_deg}°</div>
-      <div style="grid-column: span 2; margin-top: 4px; color: #38bdf8;"><b>Next:</b> ${upcomingText}</div>
+      <div style="grid-column: span 2; margin-top: 4px; color: #cc785c;"><b>Next:</b> ${upcomingText}</div>
     </div>
   `;
 
@@ -386,6 +395,7 @@ function handlePriorityRequest(req, action) {
 
 function showAlertBanner(req) {
   const banner = document.getElementById('priority-alert-banner');
+  if (!banner) return;
   document.getElementById('alert-amb-id').innerText = req.ambulance_id;
   document.getElementById('alert-junction-id').innerText = req.junction_id;
   document.getElementById('alert-distance').innerText = `${req.distance_m} m`;
@@ -397,7 +407,8 @@ function showAlertBanner(req) {
   clearInterval(alertCountdownInterval);
   alertCountdownInterval = setInterval(() => {
     countdown--;
-    document.getElementById('alert-timer-text').innerText = `${countdown}s`;
+    const timerElem = document.getElementById('alert-timer-text');
+    if (timerElem) timerElem.innerText = `${countdown}s`;
     if (countdown <= 0) {
       clearInterval(alertCountdownInterval);
     }
@@ -405,7 +416,8 @@ function showAlertBanner(req) {
 }
 
 function hideAlertBanner() {
-  document.getElementById('priority-alert-banner').style.display = 'none';
+  const banner = document.getElementById('priority-alert-banner');
+  if (banner) banner.style.display = 'none';
   clearInterval(alertCountdownInterval);
   currentPendingRequest = null;
 }
@@ -624,4 +636,3 @@ window.addEventListener('DOMContentLoaded', () => {
   initMap();
   connectWebSocket();
 });
-
