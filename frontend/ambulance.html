@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mobile Emergency Ambulance In-Vehicle Display and Telemetry Beacon">
+  <title>Ambulance Operator HUD — Team infinity</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --card-bg: rgba(20, 29, 48, 0.85);
+      --border: rgba(255, 255, 255, 0.1);
+      --red: #ef4444;
+      --green: #10b981;
+      --blue: #38bdf8;
+      --yellow: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+    body {
+      background: var(--bg);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .hud-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .header-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .emergency-btn {
+      width: 100%;
+      padding: 1.25rem;
+      font-size: 1.2rem;
+      font-weight: 800;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    .emergency-btn.active {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+      animation: pulse-red 1.5s infinite;
+    }
+    .emergency-btn.inactive {
+      background: #1e293b;
+      color: #94a3b8;
+    }
+    @keyframes pulse-red {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .stat-box {
+      background: rgba(11, 15, 25, 0.7);
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+    }
+    .stat-lbl { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
+    .stat-val { font-size: 1.4rem; font-weight: 700; margin-top: 4px; color: var(--blue); }
+    .corridor-status {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      color: #34d399;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="hud-card">
+      <div class="header-title">
+        <span>🚑 Vehicle: <strong id="amb-id-display">A102</strong></span>
+        <span id="beacon-status" style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.2); color: var(--blue); padding: 4px 8px; border-radius: 6px;">BEACON IDLE</span>
+      </div>
+
+      <!-- Emergency Toggle Button -->
+      <button id="toggle-emergency-btn" class="emergency-btn inactive" onclick="toggleEmergencyMode()">
+        <span>🚨 EMERGENCY MODE: OFF</span>
+      </button>
+
+      <!-- Corridor Status HUD -->
+      <div id="corridor-status-box" class="corridor-status" style="display: none;">
+        <span>🟢 GREEN CORRIDOR GRANTED</span>
+      </div>
+
+      <!-- Live Stats -->
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-lbl">GPS Speed</div>
+          <div id="hud-speed" class="stat-val">0 km/h</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-lbl">Upcoming Signal</div>
+          <div id="hud-junction" class="stat-val" style="font-size: 1.1rem; line-height: 1.4rem;">--</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-lbl">Distance to Signal</div>
+          <div id="hud-distance" class="stat-val">-- m</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-lbl">Estimated Arrival</div>
+          <div id="hud-eta" class="stat-val" style="color: var(--yellow);">-- s</div>
+        </div>
+      </div>
+
+      <div style="font-size: 0.75rem; color: #64748b; text-align: center;">
+        HTML5 Geolocation Beacon & AWS IoT Core Telemetry Link
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/ambulance_app.js"></script>
+</body>
+</html>

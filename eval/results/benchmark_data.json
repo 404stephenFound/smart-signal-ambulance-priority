@@ -1,0 +1,1030 @@
+{
+  "runs_per_config": 35,
+  "baseline_avg_wait_s": 11.27,
+  "proposed_avg_wait_s": 1.03,
+  "wait_reduction_percent": 90.9,
+  "mean_eta_error_s": 0.93,
+  "mean_detect_to_alert_latency_ms": 287.3,
+  "mean_alert_to_signal_ack_latency_ms": 204.4,
+  "baseline_data": [
+    {
+      "run_id": 1,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 0.47,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 2,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 11.42,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 3,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 17.67,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 4,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 17.36,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 5,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 14.4,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 6,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 14.09,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 7,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 15.06,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 8,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 20.68,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 9,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 17.59,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 10,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 21.27,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 11,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 0.91,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 12,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 4.53,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 13,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 15.89,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 14,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 1.62,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 15,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 3.02,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 16,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 3.38,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 17,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 24.4,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 18,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 2.71,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 19,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 28.28,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 20,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 10.39,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 21,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 12.06,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 22,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 3.18,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 23,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 16.03,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 24,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 1.21,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 25,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 21.45,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 26,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 18.05,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 27,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 2.26,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 28,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 0.32,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 29,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 2.1,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 30,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 8.43,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 31,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 21.64,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 32,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 1.13,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 33,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 27.07,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 34,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 2.96,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 35,
+      "mode": "baseline_conventional",
+      "ambulance_wait_s": 11.4,
+      "cross_traffic_delay_s": 0.0,
+      "success_rate": 0.0
+    }
+  ],
+  "proposed_assisted_data": [
+    {
+      "run_id": 1,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.23,
+      "cross_traffic_delay_s": 8.95,
+      "eta_error_s": 0.87,
+      "latency_detect_alert_ms": 233.4,
+      "latency_decision_s": 3.36,
+      "latency_alert_signal_ms": 245.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 2,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.86,
+      "cross_traffic_delay_s": 8.6,
+      "eta_error_s": 0.38,
+      "latency_detect_alert_ms": 280.9,
+      "latency_decision_s": 2.78,
+      "latency_alert_signal_ms": 251.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 3,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 2.77,
+      "cross_traffic_delay_s": 10.51,
+      "eta_error_s": 1.17,
+      "latency_detect_alert_ms": 349.4,
+      "latency_decision_s": 2.5,
+      "latency_alert_signal_ms": 150.1,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 4,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.32,
+      "cross_traffic_delay_s": 7.76,
+      "eta_error_s": 0.62,
+      "latency_detect_alert_ms": 312.9,
+      "latency_decision_s": 2.05,
+      "latency_alert_signal_ms": 183.5,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 5,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.16,
+      "cross_traffic_delay_s": 8.94,
+      "eta_error_s": 0.56,
+      "latency_detect_alert_ms": 342.9,
+      "latency_decision_s": 1.86,
+      "latency_alert_signal_ms": 191.8,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 6,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.59,
+      "cross_traffic_delay_s": 9.13,
+      "eta_error_s": 1.49,
+      "latency_detect_alert_ms": 332.6,
+      "latency_decision_s": 2.84,
+      "latency_alert_signal_ms": 245.3,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 7,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.31,
+      "cross_traffic_delay_s": 9.47,
+      "eta_error_s": 1.23,
+      "latency_detect_alert_ms": 255.3,
+      "latency_decision_s": 2.45,
+      "latency_alert_signal_ms": 187.5,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 8,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.67,
+      "cross_traffic_delay_s": 11.0,
+      "eta_error_s": 0.12,
+      "latency_detect_alert_ms": 260.4,
+      "latency_decision_s": 2.35,
+      "latency_alert_signal_ms": 242.6,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 9,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.19,
+      "cross_traffic_delay_s": 9.99,
+      "eta_error_s": 1.64,
+      "latency_detect_alert_ms": 306.5,
+      "latency_decision_s": 2.1,
+      "latency_alert_signal_ms": 258.3,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 10,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 1.14,
+      "cross_traffic_delay_s": 10.07,
+      "eta_error_s": 1.39,
+      "latency_detect_alert_ms": 275.6,
+      "latency_decision_s": 3.35,
+      "latency_alert_signal_ms": 206.4,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 11,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.89,
+      "cross_traffic_delay_s": 8.03,
+      "eta_error_s": 1.57,
+      "latency_detect_alert_ms": 253.4,
+      "latency_decision_s": 3.47,
+      "latency_alert_signal_ms": 216.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 12,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.78,
+      "cross_traffic_delay_s": 7.58,
+      "eta_error_s": 1.74,
+      "latency_detect_alert_ms": 244.6,
+      "latency_decision_s": 1.83,
+      "latency_alert_signal_ms": 255.4,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 13,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.64,
+      "cross_traffic_delay_s": 8.42,
+      "eta_error_s": 1.12,
+      "latency_detect_alert_ms": 282.6,
+      "latency_decision_s": 2.06,
+      "latency_alert_signal_ms": 184.5,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 14,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.28,
+      "cross_traffic_delay_s": 10.85,
+      "eta_error_s": 1.57,
+      "latency_detect_alert_ms": 295.5,
+      "latency_decision_s": 3.23,
+      "latency_alert_signal_ms": 193.5,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 15,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.5,
+      "cross_traffic_delay_s": 8.8,
+      "eta_error_s": 1.39,
+      "latency_detect_alert_ms": 291.8,
+      "latency_decision_s": 2.15,
+      "latency_alert_signal_ms": 186.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 16,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.16,
+      "cross_traffic_delay_s": 9.78,
+      "eta_error_s": 0.32,
+      "latency_detect_alert_ms": 270.7,
+      "latency_decision_s": 2.0,
+      "latency_alert_signal_ms": 233.7,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 17,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.21,
+      "cross_traffic_delay_s": 9.36,
+      "eta_error_s": 0.34,
+      "latency_detect_alert_ms": 260.2,
+      "latency_decision_s": 3.1,
+      "latency_alert_signal_ms": 186.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 18,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.12,
+      "cross_traffic_delay_s": 9.83,
+      "eta_error_s": 0.43,
+      "latency_detect_alert_ms": 278.7,
+      "latency_decision_s": 1.86,
+      "latency_alert_signal_ms": 177.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 19,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 3.75,
+      "cross_traffic_delay_s": 8.82,
+      "eta_error_s": 1.68,
+      "latency_detect_alert_ms": 285.1,
+      "latency_decision_s": 2.23,
+      "latency_alert_signal_ms": 160.5,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 20,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 1.14,
+      "cross_traffic_delay_s": 10.74,
+      "eta_error_s": 1.43,
+      "latency_detect_alert_ms": 272.3,
+      "latency_decision_s": 3.3,
+      "latency_alert_signal_ms": 146.7,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 21,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.49,
+      "cross_traffic_delay_s": 9.92,
+      "eta_error_s": 0.63,
+      "latency_detect_alert_ms": 320.4,
+      "latency_decision_s": 2.01,
+      "latency_alert_signal_ms": 157.7,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 22,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.82,
+      "cross_traffic_delay_s": 8.32,
+      "eta_error_s": 1.47,
+      "latency_detect_alert_ms": 301.2,
+      "latency_decision_s": 3.09,
+      "latency_alert_signal_ms": 155.8,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 23,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 3.77,
+      "cross_traffic_delay_s": 8.89,
+      "eta_error_s": 1.4,
+      "latency_detect_alert_ms": 376.8,
+      "latency_decision_s": 2.59,
+      "latency_alert_signal_ms": 247.8,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 24,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.68,
+      "cross_traffic_delay_s": 9.08,
+      "eta_error_s": 0.08,
+      "latency_detect_alert_ms": 271.9,
+      "latency_decision_s": 3.1,
+      "latency_alert_signal_ms": 225.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 25,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 3.31,
+      "cross_traffic_delay_s": 8.34,
+      "eta_error_s": 0.18,
+      "latency_detect_alert_ms": 303.4,
+      "latency_decision_s": 1.92,
+      "latency_alert_signal_ms": 239.6,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 26,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 1.06,
+      "cross_traffic_delay_s": 10.97,
+      "eta_error_s": 1.35,
+      "latency_detect_alert_ms": 281.5,
+      "latency_decision_s": 3.0,
+      "latency_alert_signal_ms": 188.3,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 27,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 1.12,
+      "cross_traffic_delay_s": 9.11,
+      "eta_error_s": 0.64,
+      "latency_detect_alert_ms": 242.2,
+      "latency_decision_s": 2.87,
+      "latency_alert_signal_ms": 206.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 28,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 3.62,
+      "cross_traffic_delay_s": 7.97,
+      "eta_error_s": 1.56,
+      "latency_detect_alert_ms": 317.5,
+      "latency_decision_s": 2.53,
+      "latency_alert_signal_ms": 178.9,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 29,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.79,
+      "cross_traffic_delay_s": 10.4,
+      "eta_error_s": 0.3,
+      "latency_detect_alert_ms": 237.1,
+      "latency_decision_s": 2.57,
+      "latency_alert_signal_ms": 161.6,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 30,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 1.13,
+      "cross_traffic_delay_s": 10.46,
+      "eta_error_s": 0.63,
+      "latency_detect_alert_ms": 297.5,
+      "latency_decision_s": 2.76,
+      "latency_alert_signal_ms": 250.3,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 31,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 1.19,
+      "cross_traffic_delay_s": 10.29,
+      "eta_error_s": 0.52,
+      "latency_detect_alert_ms": 305.4,
+      "latency_decision_s": 2.98,
+      "latency_alert_signal_ms": 222.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 32,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.44,
+      "cross_traffic_delay_s": 7.89,
+      "eta_error_s": 1.39,
+      "latency_detect_alert_ms": 275.6,
+      "latency_decision_s": 1.95,
+      "latency_alert_signal_ms": 238.6,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 33,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.31,
+      "cross_traffic_delay_s": 10.91,
+      "eta_error_s": 0.26,
+      "latency_detect_alert_ms": 220.2,
+      "latency_decision_s": 3.44,
+      "latency_alert_signal_ms": 228.7,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 34,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 1.06,
+      "cross_traffic_delay_s": 9.39,
+      "eta_error_s": 0.91,
+      "latency_detect_alert_ms": 308.8,
+      "latency_decision_s": 2.26,
+      "latency_alert_signal_ms": 162.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 35,
+      "mode": "proposed_assisted",
+      "ambulance_wait_s": 0.53,
+      "cross_traffic_delay_s": 8.67,
+      "eta_error_s": 0.28,
+      "latency_detect_alert_ms": 312.8,
+      "latency_decision_s": 2.94,
+      "latency_alert_signal_ms": 189.6,
+      "success_rate": 1.0
+    }
+  ],
+  "proposed_auto_data": [
+    {
+      "run_id": 1,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 1.09,
+      "cross_traffic_delay_s": 9.84,
+      "eta_error_s": 0.89,
+      "latency_detect_alert_ms": 255.8,
+      "latency_decision_s": 0.11,
+      "latency_alert_signal_ms": 210.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 2,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 3.37,
+      "cross_traffic_delay_s": 9.92,
+      "eta_error_s": 0.5,
+      "latency_detect_alert_ms": 347.1,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 144.6,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 3,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.68,
+      "cross_traffic_delay_s": 8.58,
+      "eta_error_s": 0.6,
+      "latency_detect_alert_ms": 230.6,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 213.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 4,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.7,
+      "cross_traffic_delay_s": 9.04,
+      "eta_error_s": 1.39,
+      "latency_detect_alert_ms": 349.7,
+      "latency_decision_s": 0.1,
+      "latency_alert_signal_ms": 226.8,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 5,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 2.85,
+      "cross_traffic_delay_s": 8.64,
+      "eta_error_s": 0.93,
+      "latency_detect_alert_ms": 340.3,
+      "latency_decision_s": 0.09,
+      "latency_alert_signal_ms": 239.4,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 6,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.17,
+      "cross_traffic_delay_s": 8.61,
+      "eta_error_s": 1.0,
+      "latency_detect_alert_ms": 302.1,
+      "latency_decision_s": 0.1,
+      "latency_alert_signal_ms": 238.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 7,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.17,
+      "cross_traffic_delay_s": 8.62,
+      "eta_error_s": 0.8,
+      "latency_detect_alert_ms": 283.8,
+      "latency_decision_s": 0.1,
+      "latency_alert_signal_ms": 237.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 8,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.85,
+      "cross_traffic_delay_s": 10.26,
+      "eta_error_s": 0.14,
+      "latency_detect_alert_ms": 225.8,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 217.8,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 9,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.56,
+      "cross_traffic_delay_s": 9.42,
+      "eta_error_s": 1.76,
+      "latency_detect_alert_ms": 274.9,
+      "latency_decision_s": 0.11,
+      "latency_alert_signal_ms": 176.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 10,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 1.17,
+      "cross_traffic_delay_s": 10.89,
+      "eta_error_s": 1.68,
+      "latency_detect_alert_ms": 354.4,
+      "latency_decision_s": 0.07,
+      "latency_alert_signal_ms": 248.3,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 11,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 1.12,
+      "cross_traffic_delay_s": 8.3,
+      "eta_error_s": 0.54,
+      "latency_detect_alert_ms": 338.0,
+      "latency_decision_s": 0.11,
+      "latency_alert_signal_ms": 147.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 12,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.03,
+      "cross_traffic_delay_s": 10.05,
+      "eta_error_s": 1.0,
+      "latency_detect_alert_ms": 317.8,
+      "latency_decision_s": 0.08,
+      "latency_alert_signal_ms": 165.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 13,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.28,
+      "cross_traffic_delay_s": 9.36,
+      "eta_error_s": 0.85,
+      "latency_detect_alert_ms": 290.6,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 184.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 14,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.42,
+      "cross_traffic_delay_s": 10.2,
+      "eta_error_s": 1.42,
+      "latency_detect_alert_ms": 350.1,
+      "latency_decision_s": 0.09,
+      "latency_alert_signal_ms": 199.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 15,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.55,
+      "cross_traffic_delay_s": 8.53,
+      "eta_error_s": 0.06,
+      "latency_detect_alert_ms": 269.2,
+      "latency_decision_s": 0.11,
+      "latency_alert_signal_ms": 157.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 16,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.15,
+      "cross_traffic_delay_s": 8.37,
+      "eta_error_s": 0.71,
+      "latency_detect_alert_ms": 376.2,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 146.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 17,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.32,
+      "cross_traffic_delay_s": 9.27,
+      "eta_error_s": 0.46,
+      "latency_detect_alert_ms": 323.5,
+      "latency_decision_s": 0.07,
+      "latency_alert_signal_ms": 245.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 18,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 1.07,
+      "cross_traffic_delay_s": 9.81,
+      "eta_error_s": 1.73,
+      "latency_detect_alert_ms": 324.8,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 242.8,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 19,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.4,
+      "cross_traffic_delay_s": 10.15,
+      "eta_error_s": 1.51,
+      "latency_detect_alert_ms": 287.0,
+      "latency_decision_s": 0.12,
+      "latency_alert_signal_ms": 166.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 20,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.44,
+      "cross_traffic_delay_s": 8.57,
+      "eta_error_s": 0.69,
+      "latency_detect_alert_ms": 258.7,
+      "latency_decision_s": 0.1,
+      "latency_alert_signal_ms": 196.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 21,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.99,
+      "cross_traffic_delay_s": 10.86,
+      "eta_error_s": 0.01,
+      "latency_detect_alert_ms": 234.7,
+      "latency_decision_s": 0.12,
+      "latency_alert_signal_ms": 172.1,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 22,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.12,
+      "cross_traffic_delay_s": 9.19,
+      "eta_error_s": 1.71,
+      "latency_detect_alert_ms": 309.6,
+      "latency_decision_s": 0.12,
+      "latency_alert_signal_ms": 259.6,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 23,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.85,
+      "cross_traffic_delay_s": 10.68,
+      "eta_error_s": 1.39,
+      "latency_detect_alert_ms": 290.2,
+      "latency_decision_s": 0.09,
+      "latency_alert_signal_ms": 235.7,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 24,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.76,
+      "cross_traffic_delay_s": 9.82,
+      "eta_error_s": 0.8,
+      "latency_detect_alert_ms": 255.9,
+      "latency_decision_s": 0.09,
+      "latency_alert_signal_ms": 195.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 25,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 3.2,
+      "cross_traffic_delay_s": 10.42,
+      "eta_error_s": 0.58,
+      "latency_detect_alert_ms": 290.7,
+      "latency_decision_s": 0.11,
+      "latency_alert_signal_ms": 183.9,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 26,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.3,
+      "cross_traffic_delay_s": 10.2,
+      "eta_error_s": 1.01,
+      "latency_detect_alert_ms": 355.1,
+      "latency_decision_s": 0.08,
+      "latency_alert_signal_ms": 170.8,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 27,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.65,
+      "cross_traffic_delay_s": 9.82,
+      "eta_error_s": 0.29,
+      "latency_detect_alert_ms": 244.3,
+      "latency_decision_s": 0.06,
+      "latency_alert_signal_ms": 257.2,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 28,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.57,
+      "cross_traffic_delay_s": 8.0,
+      "eta_error_s": 1.59,
+      "latency_detect_alert_ms": 227.7,
+      "latency_decision_s": 0.08,
+      "latency_alert_signal_ms": 257.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 29,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.23,
+      "cross_traffic_delay_s": 7.78,
+      "eta_error_s": 1.79,
+      "latency_detect_alert_ms": 310.2,
+      "latency_decision_s": 0.11,
+      "latency_alert_signal_ms": 157.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 30,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 3.68,
+      "cross_traffic_delay_s": 9.06,
+      "eta_error_s": 0.89,
+      "latency_detect_alert_ms": 230.1,
+      "latency_decision_s": 0.06,
+      "latency_alert_signal_ms": 241.9,
+      "success_rate": 0.0
+    },
+    {
+      "run_id": 31,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.78,
+      "cross_traffic_delay_s": 9.11,
+      "eta_error_s": 0.67,
+      "latency_detect_alert_ms": 269.6,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 184.7,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 32,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.78,
+      "cross_traffic_delay_s": 7.53,
+      "eta_error_s": 1.48,
+      "latency_detect_alert_ms": 249.8,
+      "latency_decision_s": 0.06,
+      "latency_alert_signal_ms": 253.6,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 33,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.09,
+      "cross_traffic_delay_s": 8.11,
+      "eta_error_s": 0.35,
+      "latency_detect_alert_ms": 303.6,
+      "latency_decision_s": 0.05,
+      "latency_alert_signal_ms": 166.9,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 34,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 0.7,
+      "cross_traffic_delay_s": 10.13,
+      "eta_error_s": 1.34,
+      "latency_detect_alert_ms": 304.5,
+      "latency_decision_s": 0.07,
+      "latency_alert_signal_ms": 226.0,
+      "success_rate": 1.0
+    },
+    {
+      "run_id": 35,
+      "mode": "proposed_automatic",
+      "ambulance_wait_s": 1.01,
+      "cross_traffic_delay_s": 8.03,
+      "eta_error_s": 1.74,
+      "latency_detect_alert_ms": 348.3,
+      "latency_decision_s": 0.11,
+      "latency_alert_signal_ms": 232.1,
+      "success_rate": 1.0
+    }
+  ]
+}

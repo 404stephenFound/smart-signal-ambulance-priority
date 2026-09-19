@@ -1,0 +1,25 @@
+# System Configuration and Operating Thresholds
+# All parameters are configurable at runtime and can be adjusted without code changes.
+
+thresholds:
+  monitor_distance_m: 1000.0       # > 1km: Distance monitoring only
+  prepare_distance_m: 500.0        # 500m - 1km: Early warning alert to police
+  request_distance_m: 500.0        # <= 500m: Generate Priority Request
+  emergency_distance_m: 150.0      # <= 150m: Very close emergency priority zone
+  request_eta_s: 45.0              # Generate request when ETA <= 45s
+  emergency_eta_s: 12.0            # High urgency when ETA <= 12s
+
+signal:
+  yellow_s: 3.0                    # Mandatory clearance yellow duration
+  all_red_s: 2.0                   # Mandatory clearance all-red duration
+  min_green_s: 5.0                 # Minimum green time before preemption allowed
+  normal_green_s: 15.0             # Default green time per normal cycle phase
+  priority_ttl_s: 30.0             # Priority auto-expires if no crossing confirmed
+  safety_margin_s: 3.0             # Buffer added to transition lead time
+  max_hold_s: 45.0                 # Starvation guard: max hold time for conflicting traffic
+
+operational:
+  assisted_timeout_s: 10.0         # Seconds before unapproved request escalates
+  mode: "assisted"                 # "assisted" (police approval) or "automatic"
+  heartbeat_timeout_s: 6.0         # Seconds without heartbeat before junction flags UNHEALTHY
+  crossing_exit_distance_m: 30.0   # Distance past junction to trigger crossing completion

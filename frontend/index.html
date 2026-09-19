@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Intelligent Ambulance Priority and Real-Time Traffic Signal Management System - First Commit Hackathon">
+  <title>Emergency Signal Priority Command Center — Team infinity</title>
+
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <span class="brand-badge">AWS IOT CORE</span>
+      <h1 class="brand-title">Emergency Corridor Priority System</h1>
+    </div>
+
+    <div class="system-status">
+      <div class="status-pill">
+        <span id="ws-status-dot" class="status-dot"></span>
+        <span id="ws-status-text">Connecting...</span>
+      </div>
+      <div class="status-pill" style="border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1); color: #38bdf8;">
+        <span>MODE: </span>
+        <strong id="sys-mode-badge" style="margin-left: 4px;">ASSISTED</strong>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <main class="dashboard-grid">
+
+    <!-- Left Column: Signal Controller & Simulation Runner -->
+    <section class="panel-card">
+      <div class="panel-header">
+        <h2 class="panel-title">🚦 Signal Controller (JN-04)</h2>
+        <span id="priority-active-badge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">
+          PRIORITY ACTIVE
+        </span>
+      </div>
+
+      <!-- Live Signal Box -->
+      <div class="signal-box">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+          <span style="font-size: 0.85rem; color: var(--text-secondary);">Current Phase:</span>
+          <span id="signal-state-text" style="font-weight: 700; color: #38bdf8; font-size: 1rem;">INITIALIZING</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-size: 0.85rem; color: var(--text-secondary);">Phase Countdown:</span>
+          <span id="signal-remaining-sec" style="font-weight: 700; color: #f59e0b; font-size: 1.2rem;">--</span>
+        </div>
+
+        <div class="signal-intersection-view">
+          <!-- North-South Group -->
+          <div class="signal-approach-card">
+            <div class="approach-label">
+              <span>North-South (NS)</span>
+            </div>
+            <div class="traffic-light-housing">
+              <div id="ns-light-red" class="light-bulb red"></div>
+              <div id="ns-light-yellow" class="light-bulb yellow"></div>
+              <div id="ns-light-green" class="light-bulb green"></div>
+            </div>
+          </div>
+
+          <!-- East-West Group -->
+          <div class="signal-approach-card">
+            <div class="approach-label">
+              <span>East-West (EW)</span>
+            </div>
+            <div class="traffic-light-housing">
+              <div id="ew-light-red" class="light-bulb red"></div>
+              <div id="ew-light-yellow" class="light-bulb yellow"></div>
+              <div id="ew-light-green" class="light-bulb green"></div>
+            </div>
+          </div>
+        </div>
+
+        <button id="btn-override-normal" class="btn btn-reject" style="width: 100%; margin-top: 12px;" onclick="triggerManualOverride()">
+          🔄 Manual Override / Resume Normal
+        </button>
+      </div>
+
+      <!-- Simulation Runner -->
+      <div class="sim-controls">
+        <div class="panel-header" style="padding-bottom: 4px;">
+          <h3 class="panel-title" style="font-size: 0.9rem;">⚡ GPS Simulator Control</h3>
+        </div>
+        <div class="sim-btn-row">
+          <button id="btn-sim-north" class="btn btn-sim" onclick="runDemoSimulation('north')">
+            ▶ Run North Corridor
+          </button>
+          <button id="btn-sim-west" class="btn btn-sim" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); color: white;" onclick="runDemoSimulation('west')">
+            ▶ Run West Corridor
+          </button>
+        </div>
+        <div style="font-size: 0.72rem; color: var(--text-muted); text-align: center;">
+          Replays 1Hz GPS telemetry with heading estimation & distance along polyline.
+        </div>
+      </div>
+
+      <!-- Active Ambulances -->
+      <div class="panel-header" style="padding-top: 6px;">
+        <h3 class="panel-title" style="font-size: 0.9rem;">🚑 Active Emergency Vehicles</h3>
+      </div>
+      <div id="ambulance-list-container" class="ambulance-list">
+        <!-- Dynamically rendered ambulance cards -->
+      </div>
+    </section>
+
+    <!-- Center Column: Map & Priority Alert Banner -->
+    <section class="map-container">
+      <div id="map"></div>
+
+      <!-- Priority Alert Banner Overlay -->
+      <div id="priority-alert-banner" class="priority-alert-banner">
+        <div class="alert-top">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="alert-badge">EMERGENCY PRIORITY ALERT</span>
+            <span id="alert-timer-text" class="alert-timer">10s</span>
+          </div>
+          <span style="font-size: 0.8rem; opacity: 0.9;">POLICE ACTION REQUIRED</span>
+        </div>
+
+        <div class="alert-body">
+          <div>
+            <div class="alert-stat-title">AMBULANCE</div>
+            <div id="alert-amb-id" class="alert-stat-val">A102</div>
+          </div>
+          <div>
+            <div class="alert-stat-title">DISTANCE</div>
+            <div id="alert-distance" class="alert-stat-val">380 m</div>
+          </div>
+          <div>
+            <div class="alert-stat-title">ETA</div>
+            <div id="alert-eta" class="alert-stat-val">28 s</div>
+          </div>
+          <div style="grid-column: span 3; margin-top: 4px; font-size: 0.8rem;">
+            <b>Approaching:</b> <span id="alert-junction-id">JN-04</span> via <span id="alert-approach">JN-04-N</span>
+          </div>
+        </div>
+
+        <div class="alert-actions">
+          <button id="btn-approve-priority" class="btn btn-approve" onclick="approveCurrentPriority()">
+            ✅ Approve Green Priority
+          </button>
+          <button id="btn-reject-priority" class="btn btn-reject" onclick="rejectCurrentPriority()">
+            ❌ Reject
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Live Event & Audit Log -->
+    <section class="panel-card">
+      <div class="panel-header">
+        <h2 class="panel-title">📋 Live Telemetry & Audit Log</h2>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Real-Time DB</span>
+      </div>
+
+      <div id="event-log-container" class="event-log-container">
+        <!-- Live log entries will be inserted here -->
+      </div>
+
+      <div class="safety-footer">
+        <b>Safety Disclaimer (C27):</b> Prototype traffic signal simulation for First Commit Hackathon. Enforces hardware interlocks & fail-safe fallback.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Dashboard Interactivity -->
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
